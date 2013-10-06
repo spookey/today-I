@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if loginform is defined %}
+<form action="{{ url_for('login') }}" method="post">
+    <p>{{ loginform.username(placeholder=loginform.username.name) }}</p>
+    <p>{{ loginform.password(placeholder=loginform.password.name) }}</p>
+    <p><input type="submit" value="Login" /></p>
+</form>
+{% endif %}
+
+{% if content is defined %}
+    <p>{{ content }}</p>
+{% endif %}
+
+{% if g.user.is_authenticated() %}
+    <a href="{{ url_for('logout') }}">Logout</a> {{ g.user.name }}
+{% else %}
+    <a href="{{ url_for('login') }}">Login</a>
+{% endif %}
+
+{% endblock %}

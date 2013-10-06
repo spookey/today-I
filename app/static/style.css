@@ -1,0 +1,12 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-size: 1em;
+    color: #e89524;             /* orange */
+    background-color: #393839;  /* grey */
+    text-align: center;
+}
