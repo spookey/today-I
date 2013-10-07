@@ -10,6 +10,8 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width, user-scalable=yes" />
 </head>
 <body>
+
+<div id="main">
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         <div id="message">
@@ -19,6 +21,8 @@
 {% endwith %}
 
 {% block content %}{% endblock %}
+
+</div>
 
 </body>
 </html>

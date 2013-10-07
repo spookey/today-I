@@ -13,4 +13,10 @@ from flask.ext.login import LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+from flask_wtf.csrf import CsrfProtect
+CsrfProtect(app)
+
+notice = 'flask started'
+logger.info('%s/n%s/n%s' %('=' * len(notice), notice, '=' * len(notice)))
+
 from app import views

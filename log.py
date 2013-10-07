@@ -7,6 +7,6 @@ from logging.handlers import RotatingFileHandler
 filehandler = RotatingFileHandler(logfile, 'a', 1 * 1024 * 1024, 23)
 filehandler.setFormatter(Formatter('%(asctime)s %(levelname)s: %(message)s [in %(module)s.%(funcName)s:%(lineno)d]'))
 
-logger = getLogger('i_did_today')
+logger = getLogger('today_i')
 logger.setLevel(INFO)
 logger.addHandler(filehandler)

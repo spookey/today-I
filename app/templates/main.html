@@ -1,22 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{% if loginform is defined %}
-<form action="{{ url_for('login') }}" method="post">
-    <p>{{ loginform.username(placeholder=loginform.username.name) }}</p>
-    <p>{{ loginform.password(placeholder=loginform.password.name) }}</p>
-    <p><input type="submit" value="Login" /></p>
-</form>
-{% endif %}
+{% if loginform is defined and not g.user.is_authenticated()%}
+<div id="loginform">
+    {% from "_formhelper.html" import render_field %}
+    <form action="{{ url_for('login') }}" method="POST">
+    {% for form in loginform %}
+        {{ render_field(form) }}
+    {% endfor %}
+    </form>
+</div>
+{% elif g.user.is_authenticated() %}
 
-{% if content is defined %}
-    <p>{{ content }}</p>
-{% endif %}
+    <span id="logout"><a href="{{ url_for('logout') }}">Logout</a></span>
+    <h1>Willkommen zuhause, {{ g.user.name }}</h1>
+    <h2>Heute habe ich...</h2>
 
-{% if g.user.is_authenticated() %}
-    <a href="{{ url_for('logout') }}">Logout</a> {{ g.user.name }}
-{% else %}
-    <a href="{{ url_for('login') }}">Login</a>
+    {% if taskform is defined %}
+        {% from "_formhelper.html" import render_field %}
+        <form action="{{ url_for('index') }}" method="POST" enctype="multipart/form-data">
+        {% for form in taskform %}
+            {{ render_field(form) }}
+        {% endfor %}
+        </form>
+    {% endif %}
+
+    <h2>Was bisher geschah:</h2>
+    <ul>
+        <li>nichts</li>
+        <li>gar nichts</li>
+        <li>überhaupt nichts</li>
+    </ul>
 {% endif %}
 
 {% endblock %}
