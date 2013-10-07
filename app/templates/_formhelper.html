@@ -1,16 +1,16 @@
 {% macro render_field(form) %}
     {% if form.type == 'TextField' or form.type == 'PasswordField' or form.type == 'TextAreaField' %}
-        <p>{{ form(placeholder=form.description, size=25, **kwargs)|safe }}</p>
+        <p><span class="formlabel">{{ form.label }}</span><br />{{ form(placeholder=form.description, size=25, **kwargs)|safe }}</p>
+    {% elif form.type == 'FileField' %}
+        <p><span class="formlabel">{{ form.label }}</span><br />{{ form(**kwargs)|safe }}</p>
     {% elif form.type == 'SubmitField' %}
         <p>{{ form(**kwargs)|safe }}</p>
     {% else %}
         {{ form(**kwargs)|safe }}
     {% endif %}
     {% if form.errors %}
-        <div class="errors">
-            {% for error in form.errors %}
-                <div class="error">{{ error }}</div>
-            {% endfor %}
-        </div>
+        {% for error in form.errors %}
+            <div class="error">{{ error }}</div>
+        {% endfor %}
     {% endif %}
 {% endmacro %}

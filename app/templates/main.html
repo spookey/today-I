@@ -11,8 +11,6 @@
     </form>
 </div>
 {% elif g.user.is_authenticated() %}
-
-    <span id="logout"><a href="{{ url_for('logout') }}">Logout</a></span>
     <h1>Willkommen zuhause, {{ g.user.name }}</h1>
     <h2>Heute habe ich...</h2>
 
@@ -25,7 +23,9 @@
         </form>
     {% endif %}
 
+    <span id="logout"><a href="{{ url_for('logout') }}">Logout</a></span>
     <h2>Was bisher geschah:</h2>
+
     <ul>
         <li>nichts</li>
         <li>gar nichts</li>
