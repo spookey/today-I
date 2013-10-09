@@ -1,0 +1,37 @@
+<IfModule mod_ssl.c>
+    <VirtualHost *:443>
+        SSLEngine on
+        SSLCertificateFile /etc/apache2/ssl/cccmz.crt
+        SSLCertificateKeyFile /etc/apache2/ssl/cccmz.key
+        SSLCertificateChainFile /etc/apache2/ssl/chain.pem
+
+        ServerAdmin webmaster@cccmz.de
+        ServerName today-i.cccmz.de
+        ServerSignature Off
+
+        WSGIDaemonProcess today-i user=www-data group=www-data threads=5
+        WSGIScriptAlias / /srv/today-i/today-i.wsgi
+
+        DocumentRoot /srv/today-i/
+        <Directory />
+            Options FollowSymLinks
+            AllowOverride None
+        </Directory>
+        <Directory /srv/today-i/www/>
+            AllowOverride All
+            WSGIProcessGroup yeahyeah
+            WSGIApplicationGroup %{GLOBAL}
+            Order allow,deny
+            allow from all
+        </Directory>
+
+        ErrorLog ${APACHE_LOG_DIR}/today-i.error.log
+
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    </VirtualHost>
+</IfModule>
