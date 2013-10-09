@@ -24,13 +24,20 @@
     {% endif %}
 
     <span id="logout"><a href="{{ url_for('logout') }}">Logout</a></span>
+    {% if recent is defined and recent != None %}
     <h2>Was bisher geschah:</h2>
-
-    <ul>
-        <li>nichts</li>
-        <li>gar nichts</li>
-        <li>überhaupt nichts</li>
-    </ul>
+        {% for element in recent %}
+            <div class="recent">
+                <div class="user">&bull; {{ element.data.user }}</div>
+                <div class="timestamp">{{ format_timestamp(element.timestamp) }}</div>
+                {% if element.data.image != None %}
+                    <img src="{{ url_for('image', filename=element.data.image) }}" alt="{{ element.data.description }}" />
+                {% endif %}
+                <div class="description">{{ element.data.description }}</div>
+            <hr />
+        </div>
+        {% endfor %}
+    {% endif %}
 {% endif %}
 
 {% endblock %}

@@ -6,11 +6,17 @@ from werkzeug import secure_filename
 from os import path
 from app import app
 from log import logger
-from config import taskattachments
+from config import taskattachdir, taskjson
 from app.forms import LoginForm, TaskForm
 from app.users import User
 from app.store import store
+from app.query import readjson, format_timestamp
 
+app.jinja_env.globals.update(format_timestamp=format_timestamp)
+
+@app.before_request
+def before_request():
+    g.user = current_user
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -25,10 +31,6 @@ def login():
         logger.info('already logged in %s' %(current_user))
         return redirect(url_for('index'))
     return render_template('main.html', title='Today I logged in...', loginform=loginform)
-
-@app.before_request
-def before_request():
-    g.user = current_user
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
@@ -49,16 +51,26 @@ def index():
             description = taskform.description.data
         if taskform.image.data:
             filename = secure_filename(taskform.image.data.filename)
-            taskform.image.data.save(path.join(taskattachments, filename))
+            taskform.image.data.save(path.join(taskattachdir, filename))
         store(description, filename)
-    return render_template('main.html', title='Today I ...', taskform=taskform)
-
+    recent = None
+    if readjson(taskjson) is not None:
+        recent = readjson(taskjson)
+    return render_template('main.html', title='Today I ...', taskform=taskform, recent=recent)
 
 @app.errorhandler(401)
 def not_logged_in(error):
     flash('Please log in first')
     logger.info('redirected to login')
     return redirect(url_for('login'))
+
+@app.route('/image/<filename>')
+@login_required
+def image(filename=None):
+    if path.exists(path.join(taskattachdir, filename)):
+        return send_from_directory(taskattachdir, filename)
+    return redirect(url_for('index'))
+
 
 @app.route('/favicon.ico')
 def favicon():

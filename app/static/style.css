@@ -37,27 +37,7 @@ h2 {
     margin: 1em 0;
 }
 
-#logout {
-    float: right;
-    color: #ffffff;
-    background: #11557C;
-    margin: 1.25em 0;
-    padding: .25em .5em;
-}
 
-#logout a {
-    color: #cccccc;
-}
-
-ul {
-    text-align: left;
-    list-style: none;
-    margin: .5em;
-}
-
-li {
-    padding: .25em 0;
-}
 
 form {
     padding: 0 .5em;
@@ -91,6 +71,51 @@ input[type=submit] {
 .error:before {
     content: '↯ '; /* ↯ ↪ */
     font-size: 1.5em;
+}
+
+#logout {
+    float: right;
+    color: #ffffff;
+    background: #11557C;
+    margin: 1.25em 0;
+    padding: .25em .5em;
+}
+
+#logout a {
+    color: #cccccc;
+}
+
+.recent {
+    padding: 1em 0;
+}
+
+.recent .user, .recent .timestamp {
+    color: #ffffff;
+    background-color: #11557C;
+    padding: .5em;
+}
+
+.recent .user {
+    float: left;
+}
+
+.recent .timestamp {
+    float: right;
+}
+
+.recent .description {
+    font-size: 1.2em;
+    font-style: italic;
+    clear: both;
+    padding: 1em;
+}
+
+.recent img {
+    display: block;
+    margin: 3em auto 0 auto;
+    padding: 1.5em 1.5em 3em 1.5em;
+    background: #cccccc url('dede.png') center center repeat;
+    max-width: 80%;
 }
 
 #loginform, #message {

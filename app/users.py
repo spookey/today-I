@@ -27,6 +27,7 @@ class User(UserMixin):
         self.active = False
 
         ldapressource = ldap_fetch(uid=uid, name=name, password=password)
+
         if ldapressource is not None:
             self.name = ldapressource['name']
             self.id = ldapressource['id']
