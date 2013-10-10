@@ -38,10 +38,10 @@ def backup():
 def push():
     recent = readjson(os.path.join(archivedir, taskarchivejson))
     if recent is not None:
-        content = ''
+        content = '<ul>\n'
 
-        pskel = '<p><big>{user}</big><br />{image}<i>{description}</i><br /></p>\n'
-        iskel = '<img src="{imageurl}" alt="{imagealt}"><br />'
+        pskel = '<li>{user}:<br />\n{image}<i>{description}</i></li>\n'
+        iskel = '<img src="{imageurl}" alt="{imagealt}"><br />\n'
 
         wp = Client(WPxmlrpc, WPuser, WPpass)
 
@@ -61,6 +61,8 @@ def push():
                 content += pskel.format(user=element['data']['user'], image=iskel.format(imageurl=response['url'], imagealt=element['data']['description']), description=element['data']['description'])
             else:
                 content += pskel.format(user=element['data']['user'], image='', description=element['data']['description'])
+
+        content += '</ul>\n'
 
         post = WordPressPost()
         post.title = 'Weekly Report'
