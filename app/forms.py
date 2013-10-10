@@ -6,8 +6,8 @@ from wtforms import TextField, PasswordField, SubmitField, HiddenField, TextArea
 from config import ALLOWED_EXTENSIONS
 
 class LoginForm(Form):
-    username = TextField('Username', validators=[validators.Length(min=2, message=u'Zu wenig Text..'), validators.Required(message='Der Name muss dabei sein.')], description='LDAP Login Name')
-    password = PasswordField('Passwort', validators=[validators.Required(message='Ohne Password kein Login. So einfach ist das.')], description='Passwort')
+    username = TextField('Username', validators=[validators.Length(min=2, message='Zu wenig Text..'), validators.Required(message='Der Name muss dabei sein.')], description='LDAP Login Name')
+    password = PasswordField('Passwort', validators=[validators.Required(message='Ohne Passwort kein Login. So einfach ist das.')], description='Passwort')
     submit = SubmitField('Login')
 
 class TaskForm(Form):

@@ -1,1 +1,1 @@
-0 4 * * 4 /usr/bin/python /srv/today-i/push.py >> /srv/today-i/logs/cron.log 2>&1
+0 4 * * 3 /usr/bin/python /srv/today-i/push.py >> /srv/today-i/logs/cron.log 2>&1

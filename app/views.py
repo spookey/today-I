@@ -51,6 +51,10 @@ def index():
             description = taskform.description.data
         if taskform.image.data:
             filename = secure_filename(taskform.image.data.filename)
+            # avoid overwriting existing files
+            while path.exists(path.join(taskattachdir, filename)):
+                fname, fext = path.splitext(filename)
+                filename = '%s_%s' %(fname, fext)
             taskform.image.data.save(path.join(taskattachdir, filename))
         store(description, filename)
     recent = None
@@ -69,8 +73,9 @@ def not_logged_in(error):
 def image(filename=None):
     if path.exists(path.join(taskattachdir, filename)):
         return send_from_directory(taskattachdir, filename)
+    else:
+        logger.error('non existent file requested')
     return redirect(url_for('index'))
-
 
 @app.route('/favicon.ico')
 def favicon():

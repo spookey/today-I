@@ -4,7 +4,6 @@ import os, time, json
 from datetime import datetime
 from log import logger
 
-
 def format_timestamp(value):
     if isinstance(value, float):
         return datetime.fromtimestamp(value).strftime('%a %d.%m - %H:%M')

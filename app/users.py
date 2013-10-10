@@ -4,6 +4,7 @@ from config import LDAPserver, LDAPbasedn, LDAPinactivegid
 from flask.ext.login import LoginManager, UserMixin
 from simpleldap import Connection
 from app import login_manager
+from log import logger
 
 def ldap_fetch(uid=None, name=None, password=None):
     try:
@@ -18,7 +19,8 @@ def ldap_fetch(uid=None, name=None, password=None):
             'id': unicode(r[0]['uidnumber'][0]),
             'gid': int(r[0]['gidnumber'][0])
         }
-    except:
+    except Exception as e:
+        logger.error('can\'t contact LDAP Server: %s' %(e))
         return None
 
 class User(UserMixin):
@@ -33,6 +35,8 @@ class User(UserMixin):
             self.id = ldapressource['id']
             if ldapressource['gid'] != LDAPinactivegid:
                 self.active = True
+            else:
+                logger.warn('inactive user tried to login: %s' %(ldapressource['name']))
             self.gid = ldapressource['gid']
 
         def is_active(self):

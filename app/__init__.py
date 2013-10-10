@@ -4,10 +4,11 @@ from flask import Flask
 app = Flask(__name__)
 app.config.from_object('config')
 
-if app.debug is not True:
+if not app.debug:
     from log import filehandler
+    import logging
+    filehandler.setLevel(logging.INFO)
     app.logger.addHandler(filehandler)
-    logger = app.logger
 
 from flask.ext.login import LoginManager
 login_manager = LoginManager()
@@ -16,7 +17,8 @@ login_manager.init_app(app)
 from flask_wtf.csrf import CsrfProtect
 CsrfProtect(app)
 
+from log import logger
 notice = 'flask started'
-logger.info('%s/n%s/n%s' %('=' * len(notice), notice, '=' * len(notice)))
+logger.info('\n%s\n%s\n%s' %('=' * len(notice), notice, '=' * len(notice)))
 
 from app import views

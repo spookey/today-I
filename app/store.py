@@ -35,4 +35,5 @@ def store(description, image):
     data.append(plus)
 
     writejson(taskjson, data)
+    logger.info('new entry from %s: %s image: %s' %(current_user.name, description, image))
 
