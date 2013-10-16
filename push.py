@@ -15,6 +15,7 @@ from app.query import readjson
 from app.store import writejson
 from log import logger
 from mimetypes import guess_type
+from htmlentitydefs import codepoint2name
 from config import taskjson, taskattachdir, taskarchive, taskarchivejson, WPxmlrpc, WPuser, WPpass, pskel, iskel
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.compat import xmlrpc_client
@@ -43,9 +44,19 @@ def backup():
         logger.info('nothing to backup')
 
 def push():
+
+    def _strconv(msg):
+        htmlentities = list()
+        for c in msg:
+            if ord(c) < 128:
+                htmlentities.append(c)
+            else:
+                htmlentities.append('&%s;' % codepoint2name[ord(c)])
+        return ''.join(htmlentities)
+
     recent = readjson(os.path.join(archivedir, taskarchivejson))
     if recent is not None:
-        content = '<ul>\n'
+        content = u'<ul>\n'
 
         wp = Client(WPxmlrpc, WPuser, WPpass)
 
@@ -62,11 +73,11 @@ def push():
 
                 response = wp.call(media.UploadFile(data))
 
-                content += pskel.format(user=element['data']['user'], image=iskel.format(imageurl=response['url'], imagealt=element['data']['description']), description=element['data']['description'])
+                content += pskel.format(user=element['data']['user'], image=iskel.format(imageurl=response['url'], imagealt=_strconv(element['data']['description'])), description=_strconv(element['data']['description']))
             else:
-                content += pskel.format(user=element['data']['user'], image='', description=element['data']['description'])
+                content += pskel.format(user=element['data']['user'], image='', description=_strconv(element['data']['description']))
 
-        content += '</ul>\n'
+        content += u'</ul>\n'
 
         post = WordPressPost()
         post.title = 'Weekly Report'
@@ -90,14 +101,6 @@ def delete():
 
 
 if __name__ == '__main__':
-    thisdir = os.path.dirname(os.path.abspath(__file__))
-
-    activate_this = os.path.join(thisdir, 'venv/bin/activate_this.py')
-    execfile(activate_this, dict(__file__=activate_this))
-
-    sys.path.insert(0, thisdir)
-
-
     logger.info('new push: %s' %(folder_timestamp()))
     backup()
     push()
