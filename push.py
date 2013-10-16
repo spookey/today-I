@@ -1,6 +1,14 @@
 # -.- coding: UTF-8 -.-
 
 import os, sys, time
+
+thisdir = os.path.dirname(os.path.abspath(__file__))
+
+activate_this = os.path.join(thisdir, 'venv/bin/activate_this.py')
+execfile(activate_this, dict(__file__=activate_this))
+
+sys.path.insert(0, thisdir)
+
 from shutil import copy
 from datetime import datetime
 from app.query import readjson
@@ -41,7 +49,7 @@ def push():
 
         wp = Client(WPxmlrpc, WPuser, WPpass)
 
-        for element in recent:
+        for element in sorted(recent):
             if element['data']['image'] is not None:
                 filename = os.path.join(archivedir, element['data']['image'])
                 data = {

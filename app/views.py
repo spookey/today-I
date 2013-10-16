@@ -57,9 +57,9 @@ def index():
                 filename = '%s_%s' %(fname, fext)
             taskform.image.data.save(path.join(taskattachdir, filename))
         store(description, filename)
-    recent = None
-    if readjson(taskjson) is not None:
-        recent = readjson(taskjson)
+    recent = readjson(taskjson)
+    if recent is not None:
+        recent = reversed(sorted(recent))
     return render_template('main.html', title='Today I ...', taskform=taskform, recent=recent)
 
 @app.errorhandler(401)
