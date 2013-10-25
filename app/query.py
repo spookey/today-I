@@ -12,6 +12,6 @@ def readjson(filename):
     if os.path.exists(filename):
         with open(filename, 'r') as f:
             try:
-                return json.loads(f.read())
+                return json.loads(f.read(), 'utf-8')
             except Exception as e:
                 logger.warning('could not unpack: %s' %(e))

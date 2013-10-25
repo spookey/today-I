@@ -15,8 +15,7 @@ from app.query import readjson
 from app.store import writejson
 from log import logger
 from mimetypes import guess_type
-from htmlentitydefs import codepoint2name
-from config import taskjson, taskattachdir, taskarchive, taskarchivejson, WPxmlrpc, WPuser, WPpass, pskel, iskel
+from config import taskjson, taskattachdir, taskarchive, taskarchivejson_name, reportcounterjson, WPxmlrpc, WPuser, WPpass, pskel, iskel, report_headline, post_tag, category
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.compat import xmlrpc_client
 from wordpress_xmlrpc.methods import media
@@ -33,7 +32,7 @@ def backup():
         if not os.path.exists(archivedir):
             os.makedirs(archivedir)
 
-        writejson(os.path.join(archivedir, taskarchivejson), recent)
+        writejson(os.path.join(archivedir, taskarchivejson_name), recent)
         logger.info('backup: %s' %(taskjson))
 
         for element in recent:
@@ -45,22 +44,14 @@ def backup():
 
 def push():
 
-    def _strconv(msg):
-        htmlentities = list()
-        for c in msg:
-            if ord(c) < 128:
-                htmlentities.append(c)
-            else:
-                htmlentities.append('&%s;' % codepoint2name[ord(c)])
-        return ''.join(htmlentities)
-
-    recent = readjson(os.path.join(archivedir, taskarchivejson))
+    recent = readjson(os.path.join(archivedir, taskarchivejson_name))
     if recent is not None:
-        content = u'<ul>\n'
 
+        content = u'<ul>\n'
         wp = Client(WPxmlrpc, WPuser, WPpass)
 
-        for element in sorted(recent):
+        recent = sorted(recent, key=lambda r: r['timestamp'])
+        for element in recent:
             if element['data']['image'] is not None:
                 filename = os.path.join(archivedir, element['data']['image'])
                 data = {
@@ -73,21 +64,29 @@ def push():
 
                 response = wp.call(media.UploadFile(data))
 
-                content += pskel.format(user=element['data']['user'], image=iskel.format(imageurl=response['url'], imagealt=_strconv(element['data']['description'])), description=_strconv(element['data']['description']))
+                content += pskel.format(user=element['data']['user'], image=iskel.format(imageurl=response['url'], imagealt=element['data']['description']), description=element['data']['description'])
             else:
-                content += pskel.format(user=element['data']['user'], image='', description=_strconv(element['data']['description']))
+                content += pskel.format(user=element['data']['user'], image='', description=element['data']['description'])
 
         content += u'</ul>\n'
 
+        report_no = readjson(reportcounterjson)
+        if report_no is None:
+            report_no = 0
+
         post = WordPressPost()
-        post.title = 'Weekly Report'
+        post.title = '%s #%s' %(report_headline, report_no)
         post.content = content
         post.terms_names = {
-            'post_tag': ['report'],
-            'category': ['Neulich im Space']
+            'post_tag': post_tag,
+            'category': category,
         }
 
         wp.call(NewPost(post))
+
+        report_no += 1
+        writejson(reportcounterjson, report_no)
+
     else:
         logger.info('nothing to push')
 

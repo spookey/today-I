@@ -59,7 +59,7 @@ def index():
         store(description, filename)
     recent = readjson(taskjson)
     if recent is not None:
-        recent = reversed(sorted(recent))
+        recent = sorted(recent, key=lambda r: r['timestamp'], reverse=True)
     return render_template('main.html', title='Today I ...', taskform=taskform, recent=recent)
 
 @app.errorhandler(401)

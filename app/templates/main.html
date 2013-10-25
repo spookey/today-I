@@ -31,9 +31,9 @@
                 <div class="user">&bull; {{ element.data.user }}</div>
                 <div class="timestamp">{{ format_timestamp(element.timestamp) }}</div>
                 {% if element.data.image != None %}
-                    <img src="{{ url_for('image', filename=element.data.image) }}" alt="{{ element.data.description }}" />
+                    <img src="{{ url_for('image', filename=element.data.image) }}" alt="{{ element.data.description|safe }}" />
                 {% endif %}
-                <div class="description">{{ element.data.description }}</div>
+                <div class="description">{{ element.data.description|safe }}</div>
             <hr />
         </div>
         {% endfor %}
