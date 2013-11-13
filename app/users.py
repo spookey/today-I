@@ -1,6 +1,6 @@
 # -.- coding: UTF-8 -.-
 
-from config import LDAPserver, LDAPbasedn, LDAPinactivegid
+from config import LDAPserver, LDAPPort, LDAPbasedn, LDAPinactivegid
 from flask.ext.login import LoginManager, UserMixin
 from simpleldap import Connection
 from app import login_manager
@@ -9,10 +9,10 @@ from log import logger
 def ldap_fetch(uid=None, name=None, password=None):
     try:
         if name is not None and password is not None:
-            l = Connection(LDAPserver, encryption='ssl', dn='uid=%s,%s' %(name, LDAPbasedn), password=password)
+            l = Connection(LDAPserver, port=LDAPPort, encryption='ssl', dn='uid=%s,%s' %(name, LDAPbasedn), password=password)
             r = l.search('uid=%s' %(name), base_dn=LDAPbasedn)
         else:
-            l = Connection(LDAPserver, encryption='ssl')
+            l = Connection(LDAPserver, port=LDAPPort, encryption='ssl')
             r = l.search('uidNumber=%s' %(uid), base_dn=LDAPbasedn)
         return {
             'name': r[0]['uid'][0],
@@ -29,6 +29,7 @@ class User(UserMixin):
         self.active = False
 
         ldapressource = ldap_fetch(uid=uid, name=name, password=password)
+        ldapressource = {'name': 'tester', 'id': u'123', 'gid': 123}
 
         if ldapressource is not None:
             self.name = ldapressource['name']
