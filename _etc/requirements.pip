@@ -1,0 +1,15 @@
+Flask==0.10.1
+Flask-Login==0.2.7
+Flask-WTF==0.9.3
+Jinja2==2.7.1
+MarkupSafe==0.18
+WTForms==1.0.5
+Werkzeug==0.9.4
+distribute==0.7.3
+importlib==1.0.1
+itsdangerous==0.23
+python-ldap==2.3.11
+python-wordpress-xmlrpc==2.2
+simpleldap==0.7.1
+virtualenv==1.4.9
+wsgiref==0.1.2
