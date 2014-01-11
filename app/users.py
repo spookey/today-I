@@ -1,6 +1,6 @@
 # -.- coding: UTF-8 -.-
 
-from config import LDAPserver, LDAPPort, LDAPbasedn, LDAPinactivegid
+from config import LDAPserver, LDAPPort, LDAPbasedn, LDAPinactivegid, LDAPtest
 from flask.ext.login import LoginManager, UserMixin
 from simpleldap import Connection
 from app import login_manager
@@ -28,8 +28,11 @@ class User(UserMixin):
 
         self.active = False
 
-        ldapressource = ldap_fetch(uid=uid, name=name, password=password)
-        ldapressource = {'name': 'tester', 'id': u'123', 'gid': 123}
+        if LDAPtest is True:
+            ldapressource = {'name': 'tester', 'id': u'123', 'gid': 123}
+        else:
+            ldapressource = ldap_fetch(uid=uid, name=name, password=password)
+
 
         if ldapressource is not None:
             self.name = ldapressource['name']

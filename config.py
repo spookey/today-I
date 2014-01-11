@@ -29,6 +29,7 @@ LDAPserver = 'ldap.awesome-server.com'
 LDAPPort = 636
 LDAPbasedn = 'ou=users,dc=awesome,dc=de'
 LDAPinactivegid = 1337
+LDAPtest = False
 
 # Wordpress login
 WPxmlrpc = 'http://your.awesome-blog.com/xmlrpc.php'
