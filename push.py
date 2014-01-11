@@ -15,7 +15,7 @@ from app.query import readjson
 from app.store import writejson
 from log import logger
 from mimetypes import guess_type
-from config import taskjson, taskattachdir, taskarchive, taskarchivejson_name, reportcounterjson, WPxmlrpc, WPuser, WPpass, pskel, iskel, report_headline, post_tag, category
+from config import taskjson, taskattachdir, taskarchive, taskarchivejson_name, WPxmlrpc, WPuser, WPpass, pskel, iskel, report_headline, post_tag, category
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.compat import xmlrpc_client
 from wordpress_xmlrpc.methods import media
@@ -23,6 +23,9 @@ from wordpress_xmlrpc.methods.posts import NewPost
 
 def folder_timestamp():
     return datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d')
+
+def week_timestamp():
+    return datetime.fromtimestamp(time.time()).strftime('%W/%Y')
 
 archivedir = os.path.join(taskarchive, folder_timestamp())
 
@@ -47,7 +50,7 @@ def push():
     recent = readjson(os.path.join(archivedir, taskarchivejson_name))
     if recent is not None:
 
-        content = u'<ul>\n'
+        content = u'<dl>\n'
         wp = Client(WPxmlrpc, WPuser, WPpass)
 
         recent = sorted(recent, key=lambda r: r['timestamp'])
@@ -68,14 +71,10 @@ def push():
             else:
                 content += pskel.format(user=element['data']['user'], image='', description=element['data']['description'])
 
-        content += u'</ul>\n'
-
-        report_no = readjson(reportcounterjson)
-        if report_no is None:
-            report_no = 0
+        content += u'</dl>\n'
 
         post = WordPressPost()
-        post.title = '%s #%s' %(report_headline, report_no)
+        post.title = '%s %s' %(report_headline, week_timestamp())
         post.content = content
         post.terms_names = {
             'post_tag': post_tag,
@@ -84,8 +83,6 @@ def push():
 
         wp.call(NewPost(post))
 
-        report_no += 1
-        writejson(reportcounterjson, report_no)
 
     else:
         logger.info('nothing to push')

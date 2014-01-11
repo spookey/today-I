@@ -17,9 +17,6 @@ taskattachdir = path.join(taskdir, 'images')
 taskarchive = path.join(taskdir, 'archive')
 taskarchivejson_name = 'current.json'
 
-# report counter
-reportcounterjson = path.join(taskdir, 'reportcounter.json')
-
 # allowed extensions for upload
 ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif']
 
@@ -39,7 +36,7 @@ WPuser = 'user'
 WPpass = 'pass'
 
 # Wordpress Post Template
-pskel = u'<li>{user}:<br />\n{image}<i>{description}</i></li>\n'
+pskel = u'<dt>{user}:</dt>\n<dd>{image}<i>{description}</i></dd>\n'
 iskel = u'<img src="{imageurl}" alt="{imagealt}"><br />\n'
 
 report_headline = u'Weekly Report'
