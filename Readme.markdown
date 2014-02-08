@@ -14,6 +14,12 @@ __Today I__ runs in python 2.7 and has some dependencies (see `_etc/reqirements.
 * pip install simpleldap
 * pip install img-rotate
 
+* pip install PIL
+
+Debian drives me insane&trade;:
+
+* aptitude install python-imaging
+
 Don't forget to edit the `config.py` afterwards. :smiley_cat:
 
 :octocat:
