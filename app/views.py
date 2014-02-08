@@ -11,6 +11,9 @@ from app.forms import LoginForm, TaskForm
 from app.users import User
 from app.store import store
 from app.query import readjson, format_timestamp
+from config import AUTO_ROTATE
+if AUTO_ROTATE:
+    from img_rotate import fix_orientation
 
 app.jinja_env.globals.update(format_timestamp=format_timestamp)
 
@@ -55,7 +58,10 @@ def index():
             while path.exists(path.join(taskattachdir, filename)):
                 fname, fext = path.splitext(filename)
                 filename = '%s_%s' %(fname, fext)
-            taskform.image.data.save(path.join(taskattachdir, filename))
+            image_path = path.join(taskattachdir, filename)
+            taskform.image.data.save(image_path)
+            if AUTO_ROTATE:
+                fix_orientation(image_path, save_over=True)
         store(description, filename)
     recent = readjson(taskjson)
     if recent is not None:

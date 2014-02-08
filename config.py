@@ -20,6 +20,10 @@ taskarchivejson_name = 'current.json'
 # allowed extensions for upload
 ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif']
 
+# auto rotate images to match exif data rotatio
+# Python Imaging Library required
+AUTO_ROTATE = True
+
 #>>> import os
 #>>> os.urandom(24)
 SECRET_KEY = 'Set your secret key for flask here!'
