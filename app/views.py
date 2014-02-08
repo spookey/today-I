@@ -61,7 +61,11 @@ def index():
             image_path = path.join(taskattachdir, filename)
             taskform.image.data.save(image_path)
             if AUTO_ROTATE:
-                fix_orientation(image_path, save_over=True)
+                try:
+                    fix_orientation(image_path, save_over=True)
+                except ValueError:
+                    logger.warn('image has no exif data')
+
         store(description, filename)
     recent = readjson(taskjson)
     if recent is not None:
