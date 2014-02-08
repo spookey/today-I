@@ -2,9 +2,10 @@
 
 from config import LDAPserver, LDAPPort, LDAPbasedn, LDAPinactivegid, LDAPtest
 from flask.ext.login import LoginManager, UserMixin
-from simpleldap import Connection
 from app import login_manager
 from log import logger
+if not LDAPtest:
+    from simpleldap import Connection
 
 def ldap_fetch(uid=None, name=None, password=None):
     try:
