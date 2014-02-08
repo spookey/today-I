@@ -6,11 +6,14 @@ This is a very quick and dirty hack, using our LDAP Server for authentication an
 
 ## Dependencies
 
-Today I runs in python 2.7 and has following dependencies:
+__Today I__ runs in python 2.7 and has some dependencies (see `_etc/reqirements.pip` for details). To install them run the following:
 
-pip install flask
-pip install flask-login
-pip install flask-wtf
-pip install simpleldap
+* pip install flask
+* pip install flask-login
+* pip install flask-wtf
+* pip install simpleldap
+* pip install img-rotate
+
+Don't forget to edit the `config.py` afterwards. :smiley_cat:
 
 :octocat:

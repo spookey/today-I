@@ -6,6 +6,7 @@ MarkupSafe==0.18
 WTForms==1.0.5
 Werkzeug==0.9.4
 distribute==0.7.3
+img-rotate==0.1
 importlib==1.0.1
 itsdangerous==0.23
 python-ldap==2.3.11

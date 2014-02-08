@@ -6,12 +6,11 @@ from werkzeug import secure_filename
 from os import path
 from app import app
 from log import logger
-from config import taskattachdir, taskjson
+from config import taskattachdir, taskjson, AUTO_ROTATE
 from app.forms import LoginForm, TaskForm
 from app.users import User
 from app.store import store
 from app.query import readjson, format_timestamp
-from config import AUTO_ROTATE
 if AUTO_ROTATE:
     from img_rotate import fix_orientation
 
@@ -62,10 +61,10 @@ def index():
             taskform.image.data.save(image_path)
             if AUTO_ROTATE:
                 try:
-                    fix_orientation(image_path, save_over=True)
-                except ValueError:
-                    logger.warn('image has no exif data')
-
+                    angle = fix_orientation(image_path, save_over=True)
+                    logger.info('image %s rotated by %s degrees' %(filename, angle))
+                except ValueError as e:
+                    logger.warn('image %s has no EXIF data: %s' %(filename, e))
         store(description, filename)
     recent = readjson(taskjson)
     if recent is not None:

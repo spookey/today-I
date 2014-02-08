@@ -25,7 +25,7 @@ def folder_timestamp():
     return datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d')
 
 def week_timestamp():
-    return datetime.fromtimestamp(time.time()).strftime('%W/%Y')
+    return datetime.fromtimestamp(time.time()).strftime('%Y/%W')
 
 archivedir = os.path.join(taskarchive, folder_timestamp())
 
